@@ -1,32 +1,18 @@
-package com.polendina.kabular.presentation.earnings
+package com.polendina.kabular.presentation.earnings.components
 
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import com.polendina.kabular.domain.repository.Transaction
-import kotlin.random.Random
 
 @Composable
 fun Table(
@@ -189,71 +175,5 @@ fun Table(
             rowCount = stickyRowCount,
             columnCount = stickyColumnCount
         )
-    }
-}
-
-@Composable
-fun TableHeaderCell(
-    modifier: Modifier = Modifier,
-    headerTitle: String,
-) {
-    Box (
-        modifier = Modifier
-            .background(Color.Red)
-            .border(1.dp, Color.White)
-            .clickable { }
-    ) {
-        Text(text = headerTitle)
-    }
-}
-
-@Composable
-fun TableCell(
-    modifier: Modifier = Modifier,
-    transaction: Number
-) {
-    Box (
-        modifier = Modifier
-            .background(Color.Red)
-            .border(1.dp, Color.White)
-    ) {
-        Text(
-            text = transaction.toString(),
-        )
-    }
-}
-
-enum class Columns {
-    FIRST,
-    SECOND,
-    THIRD,
-    FOURTH
-}
-
-@Preview(showBackground = true, device = Devices.PIXEL_4)
-@Composable
-private fun TablePreview() {
-    val headers: SnapshotStateList<String> = remember { mutableStateListOf("Earnings", "Expenditure", "Profit", "Proportion") }
-    val rows: SnapshotStateList<Transaction> = remember { (1..90).map {
-        Transaction(earnings = Random.nextLong(0, 100), expenditure = Random.nextLong(0, 100))
-    }.toMutableStateList()}
-    Scaffold {
-        Table(
-            rowCount = rows.size,
-            columnCount = headers.size
-        ) { rowIndex, columnIndex ->
-            if (rowIndex == 0) {
-                TableHeaderCell(headerTitle = headers[columnIndex])
-            } else {
-                rows.getOrNull(columnIndex)?.let { transaction ->
-                    when(Columns.values().get(columnIndex)) {
-                        Columns.FIRST -> TableCell(transaction = transaction.earnings)
-                        Columns.SECOND -> TableCell(transaction = transaction.expenditure)
-                        Columns.THIRD -> TableCell(transaction = transaction.profit)
-                        Columns.FOURTH -> TableCell(transaction = transaction.growthProportion)
-                    }
-                }
-            }
-        }
     }
 }

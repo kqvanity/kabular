@@ -12,5 +12,7 @@ data class Transaction(
     val profit: Long
         get() = earnings - expenditure
     val growthProportion: Double
-        get() = (earnings.toDouble() / expenditure).roundTo(4)
+        get() = (earnings.toDouble() / expenditure).roundTo(2)
+    val loss: Boolean
+        get() = profit < 0
 }
