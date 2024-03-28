@@ -10,9 +10,7 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.Dp
 
 @Composable
 fun Table(
@@ -21,25 +19,12 @@ fun Table(
     columnCount: Int,
     stickyRowCount: Int = 0,
     stickyColumnCount: Int = 0,
-    maxCellWidthDp: Dp = Dp.Infinity,
-    maxCellHeightDp: Dp = Dp.Infinity,
     verticalScrollState: ScrollState = rememberScrollState(),
     horizontalScrollState: ScrollState = rememberScrollState(),
     cellContent: @Composable (rowIndex: Int, columnIndex: Int) -> Unit
 ) {
     val columnWidths = remember { mutableStateMapOf<Int, Int>() }
     val rowHeights = remember { mutableStateMapOf<Int, Int>() }
-
-    val maxCellWidth = if (listOf(Dp.Infinity, Dp.Unspecified).contains(maxCellWidthDp)) {
-        Constraints.Infinity
-    } else {
-        with(LocalDensity.current) { maxCellWidthDp.toPx() }.toInt()
-    }
-    val maxCellHeight = if (listOf(Dp.Infinity, Dp.Unspecified).contains(maxCellHeightDp)) {
-        Constraints.Infinity
-    } else {
-        with(LocalDensity.current) { maxCellHeightDp.toPx() }.toInt()
-    }
 
     var accumWidths = mutableListOf<Int>()
     var accumHeights = mutableListOf<Int>()
@@ -111,8 +96,6 @@ fun Table(
                         Constraints(
                             minWidth = columnWidths[columnIndex] ?: 0,
                             minHeight = rowHeights[rowIndex] ?: 0,
-                            maxWidth = maxCellWidth,
-                            maxHeight = maxCellHeight
                         )
                     )
                 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -40,13 +41,16 @@ fun EditTableHeaderDialog(
     onAcceptNewHeader: () -> Unit
 ) {
     AlertDialog(
-        onDismissRequest = onDismissRequest
+        onDismissRequest = onDismissRequest,
+        modifier = modifier
     ) {
         Card {
             Column (
                 verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .padding(10.dp)
+                    .fillMaxWidth()
             ) {
                 Spacer(modifier = Modifier.padding(top = 15.dp))
                 Column {

@@ -6,4 +6,5 @@ enum class Columns {
     THIRD,
     FOURTH,
     FIFTH,
+    SIXTH
 }

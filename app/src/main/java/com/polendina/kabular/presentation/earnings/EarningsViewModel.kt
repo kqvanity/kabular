@@ -16,6 +16,7 @@ import com.polendina.kabular.domain.model.Month
 import com.polendina.kabular.domain.model.Transaction
 import com.polendina.kabular.domain.use_case.UseCases
 import com.polendina.kabular.utils.isNotEmptyNorBlank
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
@@ -27,6 +28,7 @@ interface EarningsViewModel {
    var showEditTableColumnHeaderDialog: Boolean
    fun updateHeader(newHeaderTitle: String): Boolean
    fun updateCurrentHeaderIndex(newIndex: Int): Unit
+   fun prepopulateDummyData(): Job
 }
 
 class EarningsViewModelImpl(
@@ -45,10 +47,10 @@ class EarningsViewModelImpl(
    override var showEditTableColumnHeaderDialog by mutableStateOf(false)
    override fun updateHeader(newHeaderTitle: String): Boolean {
       if (newHeaderTitle.isNotEmptyNorBlank()) {
-         headers[currentHeaderIndex] = newHeaderTitle
+         headers[currentHeaderIndex] = newHeaderTitle.trim()
          showEditTableColumnHeaderDialog = false
          viewModelScope.launch {
-            useCases.editHeader(tableHeader = TableHeader(title = newHeaderTitle, index = currentHeaderIndex))
+            useCases.editHeader(tableHeader = TableHeader(title = newHeaderTitle.trim(), index = currentHeaderIndex))
          }
          return (true)
       } else {
@@ -57,21 +59,28 @@ class EarningsViewModelImpl(
    }
 
    // TODO: Prepopulate the database with dummy data!
-   suspend fun prepopulateDummyData() {
-      listOf("Earnings", "Expenditure", "Profit", "Proportion", "State").forEachIndexed { index, headerTitle->
+   override fun prepopulateDummyData(): Job = viewModelScope.launch {
+      rows.clear()
+      listOf("Day", "Earnings", "Expenditure", "Profit", "Proportion", "State").forEachIndexed { index, headerTitle->
          useCases.editHeader(tableHeader = TableHeader(title = headerTitle, index = index))
       }
       useCases.insertMonth(Month(monthIndex = 1))
-      (1..20).map {
+      headers.clear()
+      (1..30).map {
          TransactionEntity(day = it, monthIndex = 1, earnings = Random.nextLong(0,100), expenditure = Random.nextLong(0, 100))
       }.forEach {
          useCases.insertTransaction(transaction = it.asModel())
+      }
+      useCases.getTransactions(month = Month(monthIndex = 1)).forEach {
+         rows.add(it)
+      }
+      useCases.getHeaders.invoke().let {
+         headers.addAll(it.map { it.title })
       }
    }
 
    init {
       viewModelScope.launch {
-//         prepopulateDummyData()
          useCases.getTransactions(month = Month(monthIndex = 1)).forEach {
             rows.add(it)
          }

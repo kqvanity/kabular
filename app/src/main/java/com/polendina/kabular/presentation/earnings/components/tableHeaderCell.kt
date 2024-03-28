@@ -5,7 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,7 +28,6 @@ fun TableHeaderCell(
             .clip(RoundedCornerShape(5.dp))
             .background(MaterialTheme.colorScheme.secondary) // primary, secondary,
             .border(1.dp, Color.White)
-            .width(50.dp)
             .height(40.dp)
             .clickable { editCallback() }
     ) {

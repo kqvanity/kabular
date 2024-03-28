@@ -6,7 +6,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +20,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.polendina.kabular.domain.model.Months
+import com.polendina.kabular.utils.initialCapital
 
 @Composable
 private fun TableCell(
@@ -27,7 +34,7 @@ private fun TableCell(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .border(1.dp, Color.White)
-            .width(90.dp)
+            .width(100.dp)
             .height(40.dp)
     ) {
         content()
@@ -70,5 +77,17 @@ fun BooleanTableCell(
             ),
             overflow = TextOverflow.Clip
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun JustMeh() {
+    LazyVerticalGrid(columns = GridCells.Adaptive(30.dp)) {
+        items(Months.entries.toList()) {
+            AssistChip(onClick = { /*TODO*/ }, label = {
+                Text(text = it.name.initialCapital())
+            })
+        }
     }
 }
