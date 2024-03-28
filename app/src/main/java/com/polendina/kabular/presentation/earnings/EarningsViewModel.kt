@@ -7,11 +7,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
-import com.polendina.kabular.domain.repository.Transaction
+import androidx.lifecycle.viewModelScope
+import com.polendina.kabular.data.database.model.TableHeader
+import com.polendina.kabular.data.database.model.TransactionEntity
+import com.polendina.kabular.domain.mapper.asModel
+import com.polendina.kabular.domain.model.Month
+import com.polendina.kabular.domain.model.Transaction
 import com.polendina.kabular.domain.use_case.UseCases
 import com.polendina.kabular.utils.isNotEmptyNorBlank
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 interface EarningsViewModel {
@@ -27,10 +32,9 @@ interface EarningsViewModel {
 class EarningsViewModelImpl(
    private val useCases: UseCases
 ): ViewModel(), EarningsViewModel {
-   override val headers: SnapshotStateList<String> = mutableStateListOf("Earnings", "Expenditure", "Profit", "Proportion", "State")
-   override val rows: SnapshotStateList<Transaction> = (1..90).map {
-      Transaction(earnings = Random.nextLong(0,100), expenditure = Random.nextLong(0, 100))
-   }.toMutableStateList()
+   override val headers: SnapshotStateList<String> = mutableStateListOf()
+   // TODO: This should be triggered by user or something?
+   override val rows: SnapshotStateList<Transaction> = mutableStateListOf()
 
    override var currentHeader by mutableStateOf("")
    override var currentHeaderIndex: Int by mutableIntStateOf(0)
@@ -38,14 +42,42 @@ class EarningsViewModelImpl(
       currentHeaderIndex = newIndex
       currentHeader = headers[currentHeaderIndex]
    }
-   override var showEditTableColumnHeaderDialog by mutableStateOf(true)
+   override var showEditTableColumnHeaderDialog by mutableStateOf(false)
    override fun updateHeader(newHeaderTitle: String): Boolean {
-      if (!newHeaderTitle.isNotEmptyNorBlank()) {
+      if (newHeaderTitle.isNotEmptyNorBlank()) {
          headers[currentHeaderIndex] = newHeaderTitle
          showEditTableColumnHeaderDialog = false
+         viewModelScope.launch {
+            useCases.editHeader(tableHeader = TableHeader(title = newHeaderTitle, index = currentHeaderIndex))
+         }
          return (true)
       } else {
          return (false)
+      }
+   }
+
+   // TODO: Prepopulate the database with dummy data!
+   suspend fun prepopulateDummyData() {
+      listOf("Earnings", "Expenditure", "Profit", "Proportion", "State").forEachIndexed { index, headerTitle->
+         useCases.editHeader(tableHeader = TableHeader(title = headerTitle, index = index))
+      }
+      useCases.insertMonth(Month(monthIndex = 1))
+      (1..20).map {
+         TransactionEntity(day = it, monthIndex = 1, earnings = Random.nextLong(0,100), expenditure = Random.nextLong(0, 100))
+      }.forEach {
+         useCases.insertTransaction(transaction = it.asModel())
+      }
+   }
+
+   init {
+      viewModelScope.launch {
+//         prepopulateDummyData()
+         useCases.getTransactions(month = Month(monthIndex = 1)).forEach {
+            rows.add(it)
+         }
+         useCases.getHeaders.invoke().let {
+            headers.addAll(it.map { it.title })
+         }
       }
    }
 }

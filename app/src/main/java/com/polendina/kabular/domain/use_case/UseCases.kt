@@ -1,11 +1,11 @@
 package com.polendina.kabular.domain.use_case
 
 data class UseCases(
-    val getTransactions: getTransactions,
-    val addTransaction: addTransaction,
+    val getTransactions: GetTransactions,
+    val insertTransaction: InsertTransaction,
     val delTransaction: DelTransaction,
-    val getHeaders: getHeaders,
-    val editHeader: EditHeader
+    val getHeaders: GetHeaders,
+    val editHeader: EditHeader,
+    val insertMonth: InsertMonth,
+    val getMonths: GetMonths
 )
-class getHeaders
-class EditHeader
