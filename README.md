@@ -16,8 +16,10 @@ obtained via a local Room database.
 
 ## Showcase
 <span>
-    <img src="./media/table.png"> &nbsp; 
-    <img src="./media/headerEdit.png"> &nbsp; 
+    <img src="./media/table.png" width="220" height="450"> &nbsp; 
+    <img src="./media/datePicker.png" width="220" height="450"> &nbsp; 
+    <img src="./media/headerEdit.png" width="220" height="450"> &nbsp; 
+    <img src="./media/noData.png" width="220" height="450"> &nbsp; 
 </span>
 
 ## Install

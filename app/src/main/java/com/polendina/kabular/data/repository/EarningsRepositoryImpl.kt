@@ -23,10 +23,11 @@ class EarningsRepositoryImpl(
     override suspend fun getTransactions(month: Month): List<Transaction> {
         // TODO: Maybe implement a yearly filter or so?
         return kabularDatabase.kabularDao.getMonthWithTransactions(monthIndex = month.monthIndex)
-            .flatMap { it.transactionEntities }
-            .map {
+            .firstOrNull()
+            ?.transactionEntities
+            ?.map {
                 it.asModel()
-            }
+            } ?: emptyList()
     }
     override suspend fun getHeaders(): List<TableHeader> {
         return kabularDatabase.kabularDao.getTableHeaders()

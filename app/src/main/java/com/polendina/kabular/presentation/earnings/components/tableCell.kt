@@ -79,15 +79,3 @@ fun BooleanTableCell(
         )
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-private fun JustMeh() {
-    LazyVerticalGrid(columns = GridCells.Adaptive(30.dp)) {
-        items(Months.entries.toList()) {
-            AssistChip(onClick = { /*TODO*/ }, label = {
-                Text(text = it.name.initialCapital())
-            })
-        }
-    }
-}
