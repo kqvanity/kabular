@@ -24,6 +24,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -62,7 +63,6 @@ dependencies {
     implementation(libs.androidx.material3)
     // Room database
     version = "2.5.2"
-    implementation("androidx.room:room-ktx:$version")
     ksp("androidx.room:room-compiler:$version")
     implementation("androidx.room:room-ktx:$version")
     testImplementation(libs.junit)
