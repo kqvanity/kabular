@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">kabular</string>
+    <string name="select">Select</string>
+    <string name="show">Show</string>
+    <string name="choose_date">Choose Date</string>
+    <string name="edit_column_title">Edit Column Title</string>
+    <string name="column_title">Column Title</string>
+    <string name="cancel">Cancel</string>
+    <string name="save_close">Save &amp; Close</string>
+    <string name="gain">Gain</string>
+    <string name="loss">Loss</string>
+    <string name="unimplemented_behavior">Behavior still not implemented!</string>
+    <string name="data_not_found">Data not found! Hit reload button to populate table with dummy data</string>
+    <string name="Day">Day</string>
+    <string name="Earnings">Earnings</string>
+    <string name="Expenditure">Expenditure</string>
+    <string name="Profit">Profit</string>
+    <string name="Proportion">Proportion</string>
+    <string name="State">State</string>
 </resources>

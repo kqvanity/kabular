@@ -1,5 +1,6 @@
 package com.polendina.kabular.presentation.earnings
 
+import android.app.Application
 import androidx.annotation.IntRange
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -7,8 +8,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.polendina.kabular.R
 import com.polendina.kabular.data.database.model.TableHeader
 import com.polendina.kabular.data.database.model.TransactionEntity
 import com.polendina.kabular.domain.mapper.asModel
@@ -35,8 +37,9 @@ interface EarningsViewModel {
 }
 
 class EarningsViewModelImpl(
-   private val useCases: UseCases
-): ViewModel(), EarningsViewModel {
+   private val useCases: UseCases,
+   val application: Application
+): AndroidViewModel(application = application), EarningsViewModel {
    override val headers: SnapshotStateList<String> = mutableStateListOf()
    // TODO: This should be triggered by user or something?
    override val rows: SnapshotStateList<Transaction> = mutableStateListOf()
@@ -70,7 +73,11 @@ class EarningsViewModelImpl(
 
    // TODO: Prepopulate the database with dummy data!
    override fun prepopulateDummyData(): Job = viewModelScope.launch {
-      listOf("Day", "Earnings", "Expenditure", "Profit", "Proportion", "State").forEachIndexed { index, headerTitle->
+      listOf(
+         application.resources.getString(R.string.Day), application.resources.getString(R.string.Earnings),
+         application.resources.getString(R.string.Expenditure), application.resources.getString( R.string.Profit),
+         application.resources.getString(R.string.Proportion), application.resources.getString(R.string.State)
+      ).forEachIndexed { index, headerTitle->
          useCases.editHeader(tableHeader = TableHeader(title = headerTitle, index = index))
       }
       useCases.insertMonth(Month(monthIndex = currentDate.month.value))
@@ -86,9 +93,10 @@ class EarningsViewModelImpl(
       }
       updateTransactionsDate()
    }
+
    suspend fun updateTransactionsDate() {
       headers.clear()
-      useCases.getHeaders.invoke().let {
+      useCases.getHeaders().let {
          headers.addAll(it.map { it.title })
       }
       println("INFO" + currentDate.month.value)

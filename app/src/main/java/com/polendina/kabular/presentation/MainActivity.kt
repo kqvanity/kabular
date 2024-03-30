@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     // TODO: Hilt those dependencies!
-                    EarningsScreen(earningsViewModel = EarningsViewModelImpl(useCases = UseCases(
+                    EarningsScreen(earningsViewModel = EarningsViewModelImpl(application = application, useCases = UseCases(
                         getTransactions = GetTransactions(earningsRepository),
                         insertTransaction = InsertTransaction(earningsRepository = earningsRepository),
                         delTransaction = DelTransaction(),

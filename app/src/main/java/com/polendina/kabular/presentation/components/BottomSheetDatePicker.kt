@@ -25,11 +25,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.polendina.kabular.R
 import com.polendina.kabular.domain.model.Months
 import com.polendina.kabular.utils.initialCapital
 import kotlinx.coroutines.launch
@@ -56,7 +58,7 @@ fun BottomSheetDatePicker(
                     .padding(10.dp)
             ) {
                 Text(
-                    text = "Choose Date",
+                    text = stringResource(id = R.string.choose_date),
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
@@ -85,7 +87,7 @@ fun BottomSheetDatePicker(
                         width = 150.dp,
                         itemHeight = 70.dp,
                         items = Months.entries.map { it.name.initialCapital() },
-                        initialItem = "January",
+                        initialItem = Months.JANUARY.name.initialCapital(),
                         textStyle = TextStyle(fontSize = 23.sp),
                         textColor = Color.LightGray,
                         selectedTextColor = Color.Black,
@@ -111,7 +113,7 @@ fun BottomSheetDatePicker(
                             containerColor = MaterialTheme.colorScheme.outline
                         )
                     ) {
-                        Text(text = "Select")
+                        Text(text = stringResource(id = R.string.select))
                     }
                 }
             }
@@ -145,7 +147,7 @@ private fun BottomSheetDatePickerPreview() {
                 bottomSheetScaffoldState.bottomSheetState.expand()
             }
         }) {
-            Text(text = "Show")
+            Text(text = stringResource(id = R.string.show))
         }
     }
 }

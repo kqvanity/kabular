@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -79,9 +80,10 @@ fun EarningsScreen(
     ) {
         Scaffold (
             topBar = {
+                val unimplementedBehavior = stringResource(id = R.string.unimplemented_behavior)
                 AppTopBar(
                     undefinedBehaviorCallback = {
-                        Toast.makeText(localContext, "Behavior still not implemented!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(localContext, unimplementedBehavior, Toast.LENGTH_SHORT).show()
                     },
                     addNewMonth = {
                         coroutineScope.launch {
@@ -166,7 +168,7 @@ fun EarningsScreen(
                         contentDescription = null,
                     )
                     Text(
-                        text = "Data not found! Hit reload button to populate table with dummy data",
+                        text = stringResource(id = R.string.data_not_found),
                         modifier = Modifier
                             .fillMaxWidth(0.6f)
                     )
@@ -179,6 +181,11 @@ fun EarningsScreen(
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Composable
 private fun TablePreview() {
+    val topHeaders = listOf(
+        stringResource(id = R.string.Day), stringResource(id = R.string.Earnings),
+        stringResource(id = R.string.Expenditure), stringResource( id = R.string.Profit),
+        stringResource(id = R.string.Proportion), stringResource(id = R.string.State)
+    )
     EarningsScreen(
         earningsViewModel = object : EarningsViewModel {
             override val headers: SnapshotStateList<String> = remember { mutableStateListOf() }
@@ -197,7 +204,7 @@ private fun TablePreview() {
             }
             val coroutineScope = rememberCoroutineScope()
             override fun prepopulateDummyData(): Job = coroutineScope.launch {
-                headers.addAll(listOf("Day", "Earnings", "Expenditure", "Profit", "Proportion", "State"))
+                headers.addAll(topHeaders)
                 rows.addAll((1..32).map {
                     Transaction(day = it, monthIndex = Random.nextInt(from = 1, until = 12), earnings = Random.nextLong(0,100), expenditure = Random.nextLong(0, 100))
                 }.toMutableStateList())

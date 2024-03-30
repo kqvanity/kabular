@@ -24,11 +24,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.polendina.kabular.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,7 +57,7 @@ fun EditTableHeaderDialog(
                 Spacer(modifier = Modifier.padding(top = 15.dp))
                 Column {
                     Text(
-                        text = "Edit Column Title",
+                        text = stringResource(id = R.string.edit_column_title),
                         style = TextStyle(
                             fontWeight = FontWeight.Bold
                         )
@@ -66,7 +68,7 @@ fun EditTableHeaderDialog(
                         isError = invalidHeaderTitle,
                         placeholder = {
                             Text(
-                                text = "Column Title",
+                                text = stringResource(id = R.string.column_title),
                                 style = TextStyle(
                                     color = Color.Gray
                                 )
@@ -82,7 +84,7 @@ fun EditTableHeaderDialog(
                 ) {
                     TextButton(onClick = onDismissRequest) {
                         Text(
-                            text = "Cancel",
+                            text = stringResource(id = R.string.cancel),
                             style = TextStyle(
                                 color = MaterialTheme.colorScheme.error
                             )
@@ -93,9 +95,8 @@ fun EditTableHeaderDialog(
                         shape = RoundedCornerShape(10.dp),
                         modifier = Modifier
                     ) {
-                        // TODO: This strings should be localized later on!
                         Text(
-                            text = "Save & Close"
+                            text = stringResource(id = R.string.save_close)
                         )
                     }
                 }
